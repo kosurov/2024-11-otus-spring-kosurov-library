@@ -1,4 +1,4 @@
-package ru.diasoft.library.dao.impl;
+package ru.diasoft.library.repository.impl;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Dao для работы с авторами")
 @JdbcTest
-@Import(AuthorDaoJdbc.class)
-class AuthorDaoJdbcTest {
+@Import(AuthorRepositoryJpa.class)
+class AuthorRepositoryJpaTest {
 
     private static final int EXPECTED_QUANTITY_OF_AUTHORS = 3;
     private static final long NOT_EXISTED_AUTHOR_ID = 100L;
@@ -26,7 +26,7 @@ class AuthorDaoJdbcTest {
     private static final String EXISTED_AUTHOR_FULL_NAME = "Агата Кристи";
 
     @Autowired
-    private AuthorDaoJdbc authorDao;
+    private AuthorRepositoryJpa authorDao;
 
     @DisplayName("Возвращает всех авторов")
     @Test
