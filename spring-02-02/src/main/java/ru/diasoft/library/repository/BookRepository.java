@@ -1,10 +1,10 @@
-package ru.diasoft.library.dao;
+package ru.diasoft.library.repository;
 
 import ru.diasoft.library.domain.Book;
 
 import java.util.List;
 
-public interface BookDao {
+public interface BookRepository {
 
     List<Book> findAll();
     Book getById(long id);

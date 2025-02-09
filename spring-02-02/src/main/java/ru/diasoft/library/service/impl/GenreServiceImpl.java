@@ -1,7 +1,7 @@
 package ru.diasoft.library.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.diasoft.library.dao.GenreDao;
+import ru.diasoft.library.repository.GenreRepository;
 import ru.diasoft.library.domain.Genre;
 import ru.diasoft.library.exception.GenreNotFoundException;
 import ru.diasoft.library.service.GenreService;
@@ -9,15 +9,15 @@ import ru.diasoft.library.service.GenreService;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
-    public GenreServiceImpl(GenreDao genreDao) {
-        this.genreDao = genreDao;
+    public GenreServiceImpl(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
     }
 
     @Override
     public Genre getById(long id) {
-        return genreDao.getById(id);
+        return genreRepository.getById(id);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class GenreServiceImpl implements GenreService {
     }
 
     private Genre getByName(String name) {
-        return genreDao.getByName(name);
+        return genreRepository.getByName(name);
     }
 
     private Genre create(String name) {
         Genre genre = new Genre();
         genre.setName(name);
-        return genreDao.save(genre);
+        return genreRepository.save(genre);
     }
 }
