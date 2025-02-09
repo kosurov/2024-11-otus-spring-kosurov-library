@@ -1,10 +1,10 @@
-package ru.diasoft.library.dao;
+package ru.diasoft.library.repository;
 
 import ru.diasoft.library.domain.Genre;
 
 import java.util.List;
 
-public interface GenreDao {
+public interface GenreRepository {
 
     List<Genre> findAll();
     Genre getById(long id);

@@ -1,7 +1,7 @@
 package ru.diasoft.library.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.diasoft.library.dao.BookDao;
+import ru.diasoft.library.repository.BookRepository;
 import ru.diasoft.library.domain.Author;
 import ru.diasoft.library.domain.Book;
 import ru.diasoft.library.domain.Genre;
@@ -15,12 +15,12 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
     private final AuthorService authorService;
     private final GenreService genreService;
 
-    public BookServiceImpl(BookDao bookDao, AuthorService authorService, GenreService genreService) {
-        this.bookDao = bookDao;
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService, GenreService genreService) {
+        this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.genreService = genreService;
     }
@@ -33,17 +33,17 @@ public class BookServiceImpl implements BookService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(author);
         book.setGenre(genre);
-        return bookDao.save(book);
+        return bookRepository.save(book);
     }
 
     @Override
     public Book getById(long id) {
-        return setBookRelations(bookDao.getById(id));
+        return setBookRelations(bookRepository.getById(id));
     }
 
     @Override
     public List<Book> findAll() {
-        List<Book> books = bookDao.findAll();
+        List<Book> books = bookRepository.findAll();
         for (Book book : books) {
             setBookRelations(book);
         }
@@ -54,16 +54,16 @@ public class BookServiceImpl implements BookService {
     public Book update(BookRequestDto bookDto) {
         Author author = authorService.findByFullNameOrCreate(bookDto.getAuthorFullName());
         Genre genre = genreService.findByNameOrCreate(bookDto.getGenre());
-        Book existedBook = bookDao.getById(bookDto.getId());
+        Book existedBook = bookRepository.getById(bookDto.getId());
         existedBook.setTitle(bookDto.getTitle());
         existedBook.setAuthor(author);
         existedBook.setGenre(genre);
-        return bookDao.update(existedBook);
+        return bookRepository.update(existedBook);
     }
 
     @Override
     public void delete(long id) {
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
     private Book setBookRelations(Book book) {

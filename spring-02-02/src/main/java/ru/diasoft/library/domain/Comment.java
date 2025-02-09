@@ -20,14 +20,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "author")
-public class Author {
+@Table(name = "comment")
+public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_sequence_id")
-    @SequenceGenerator(name = "author_sequence_id", sequenceName = "author_sequence_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_sequence_id")
+    @SequenceGenerator(name = "comment_sequence_id", sequenceName = "comment_sequence_id", allocationSize = 1)
     private Long id;
 
-    @Column(name = "fullname", nullable = false, unique = true)
-    private String fullName;
+    @Column(name = "text", nullable = false)
+    private String text;
 }
