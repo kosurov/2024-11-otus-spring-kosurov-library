@@ -1,4 +1,4 @@
-package ru.diasoft.library.dao.impl;
+package ru.diasoft.library.repository.impl;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Dao для работы с книгами")
 @JdbcTest
-@Import(BookDaoJdbc.class)
-class BookDaoJdbcTest {
+@Import(BookRepositoryJpa.class)
+class BookRepositoryJdbcTest {
 
     private static final int EXPECTED_QUANTITY_OF_BOOKS = 3;
     private static final long NOT_EXISTED_BOOK_ID = 100L;
@@ -30,7 +30,7 @@ class BookDaoJdbcTest {
     private static final long GENRE_ID = 1L;
 
     @Autowired
-    private BookDaoJdbc bookDao;
+    private BookRepositoryJpa bookDao;
 
     @DisplayName("Возвращает все книги")
     @Test

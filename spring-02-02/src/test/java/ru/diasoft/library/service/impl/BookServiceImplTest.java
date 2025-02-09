@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.diasoft.library.dao.BookDao;
+import ru.diasoft.library.repository.BookRepository;
 import ru.diasoft.library.domain.Author;
 import ru.diasoft.library.domain.Book;
 import ru.diasoft.library.domain.Genre;
@@ -28,7 +28,7 @@ class BookServiceImplTest {
     @InjectMocks
     private BookServiceImpl bookService;
     @Mock
-    private BookDao bookDao;
+    private BookRepository bookRepository;
     @Mock
     private AuthorService authorService;
     @Mock
@@ -58,7 +58,7 @@ class BookServiceImplTest {
 
         when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
-        when(bookDao.save(bookToSave)).thenReturn(savedBook);
+        when(bookRepository.save(bookToSave)).thenReturn(savedBook);
 
         Book actual = bookService.create(bookDto);
 
@@ -85,7 +85,7 @@ class BookServiceImplTest {
         expected.setGenre(genre);
         expected.setTitle("Книга");
 
-        when(bookDao.getById(id)).thenReturn(bookFromDb);
+        when(bookRepository.getById(id)).thenReturn(bookFromDb);
         when(authorService.getById(author.getId())).thenReturn(author);
         when(genreService.getById(genre.getId())).thenReturn(genre);
 
@@ -112,7 +112,7 @@ class BookServiceImplTest {
         expected.setGenre(genre);
         expected.setTitle("Книга");
 
-        when(bookDao.findAll()).thenReturn(Collections.singletonList(bookFromDb));
+        when(bookRepository.findAll()).thenReturn(Collections.singletonList(bookFromDb));
         when(authorService.getById(author.getId())).thenReturn(author);
         when(genreService.getById(genre.getId())).thenReturn(genre);
 
@@ -147,10 +147,10 @@ class BookServiceImplTest {
         updatedBook.setGenre(genre);
         updatedBook.setTitle(bookDto.getTitle());
 
-        when(bookDao.getById(id)).thenReturn(bookFromDb);
+        when(bookRepository.getById(id)).thenReturn(bookFromDb);
         when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
-        when(bookDao.update(updatedBook)).thenReturn(updatedBook);
+        when(bookRepository.update(updatedBook)).thenReturn(updatedBook);
 
         Book actual = bookService.update(bookDto);
 
@@ -162,6 +162,6 @@ class BookServiceImplTest {
     void delete_shouldDeleteBook() {
         long id = 10L;
         bookService.delete(id);
-        verify(bookDao).deleteById(id);
+        verify(bookRepository).deleteById(id);
     }
 }
