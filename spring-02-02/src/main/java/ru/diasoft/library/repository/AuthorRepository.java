@@ -1,10 +1,10 @@
-package ru.diasoft.library.dao;
+package ru.diasoft.library.repository;
 
 import ru.diasoft.library.domain.Author;
 
 import java.util.List;
 
-public interface AuthorDao {
+public interface AuthorRepository {
 
     List<Author> findAll();
     Author getById(long id);

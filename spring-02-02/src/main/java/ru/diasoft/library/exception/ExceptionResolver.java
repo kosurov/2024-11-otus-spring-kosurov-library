@@ -18,6 +18,9 @@ public class ExceptionResolver implements CommandExceptionResolver {
         if (e instanceof GenreNotFoundException) {
             return CommandHandlingResult.of("Requested genre not found\n");
         }
+        if (e instanceof CommentNotFoundException) {
+            return CommandHandlingResult.of("Requested comment not found\n");
+        }
         return CommandHandlingResult.of("Internal server exception\n");
     }
 }
