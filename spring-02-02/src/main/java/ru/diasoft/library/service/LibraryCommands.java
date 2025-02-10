@@ -3,7 +3,9 @@ package ru.diasoft.library.service;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 import ru.diasoft.library.domain.Book;
+import ru.diasoft.library.domain.Comment;
 import ru.diasoft.library.dto.BookRequestDto;
+import ru.diasoft.library.dto.CommentDto;
 
 import java.util.stream.Collectors;
 
@@ -11,9 +13,11 @@ import java.util.stream.Collectors;
 public class LibraryCommands {
 
     private final BookService bookService;
+    private final CommentService commentService;
 
-    public LibraryCommands(BookService bookService) {
+    public LibraryCommands(BookService bookService, CommentService commentService) {
         this.bookService = bookService;
+        this.commentService = commentService;
     }
 
     @Command(command = "create-book", description = "Add a new book to the Library")
@@ -58,4 +62,26 @@ public class LibraryCommands {
     public void deleteBookById(long id) {
         bookService.delete(id);
     }
+
+    @Command(command = "create-comment", description = "Add a new comment for a book")
+    public Comment createComment(@Option(longNames = "bookId", required = true) Long bookId,
+                                 @Option(longNames = "text", required = true) String text) {
+        CommentDto commentDto = CommentDto.builder()
+                .bookId(bookId)
+                .text(text).build();
+        return commentService.create(commentDto);
+    }
+
+    @Command(command = "delete-comment", description = "Remove a comment for a book by id")
+    public void deleteCommentById(long id) {
+        commentService.delete(id);
+    }
+
+    @Command(command = "find-book-comments", description = "List all comments for a book by bookId")
+    public String findBookComments(long bookId) {
+        return commentService.findAllByBookId(bookId).stream()
+                .map(CommentDto::toString)
+                .collect(Collectors.joining("\n"));
+    }
+
 }
