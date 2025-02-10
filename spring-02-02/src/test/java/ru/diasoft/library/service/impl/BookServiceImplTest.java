@@ -71,12 +71,6 @@ class BookServiceImplTest {
     void getById_shouldReturnBook() {
         long id = 10L;
 
-        Book bookFromDb = new Book();
-        bookFromDb.setId(10L);
-        bookFromDb.setAuthor(new Author(1L, null));
-        bookFromDb.setGenre(new Genre(2L, null));
-        bookFromDb.setTitle("Книга");
-
         Author author = new Author(1L, "Автор");
         Genre genre = new Genre(2L, "Жанр");
 
@@ -86,36 +80,24 @@ class BookServiceImplTest {
         expected.setGenre(genre);
         expected.setTitle("Книга");
 
-        when(bookRepository.getById(id)).thenReturn(bookFromDb);
-        when(authorService.getById(author.getId())).thenReturn(author);
-        when(genreService.getById(genre.getId())).thenReturn(genre);
+        when(bookRepository.getById(id)).thenReturn(expected);
 
         Book actual = bookService.getById(id);
-
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @DisplayName("Получает все книги")
     @Test
     void findAll_shouldReturnAllBooks() {
-        Book bookFromDb = new Book();
-        bookFromDb.setId(10L);
-        bookFromDb.setAuthor(new Author(1L, null));
-        bookFromDb.setGenre(new Genre(2L, null));
-        bookFromDb.setTitle("Книга");
-
         Author author = new Author(1L, "Автор");
         Genre genre = new Genre(2L, "Жанр");
-
         Book expected = new Book();
         expected.setId(10L);
         expected.setAuthor(author);
         expected.setGenre(genre);
         expected.setTitle("Книга");
 
-        when(bookRepository.findAll()).thenReturn(Collections.singletonList(bookFromDb));
-        when(authorService.getById(author.getId())).thenReturn(author);
-        when(genreService.getById(genre.getId())).thenReturn(genre);
+        when(bookRepository.findAll()).thenReturn(Collections.singletonList(expected));
 
         List<Book> actual = bookService.findAll();
 
