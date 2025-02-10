@@ -1,6 +1,7 @@
 package ru.diasoft.library.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.diasoft.library.repository.GenreRepository;
 import ru.diasoft.library.domain.Genre;
 import ru.diasoft.library.exception.GenreNotFoundException;
@@ -21,6 +22,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
+    @Transactional
     public Genre findByNameOrCreate(String name) {
         try {
             return getByName(name);
