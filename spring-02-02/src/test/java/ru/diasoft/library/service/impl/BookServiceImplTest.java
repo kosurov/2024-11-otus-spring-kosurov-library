@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -58,7 +59,7 @@ class BookServiceImplTest {
 
         when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
-        when(bookRepository.save(bookToSave)).thenReturn(savedBook);
+        when(bookRepository.save(any())).thenReturn(savedBook);
 
         Book actual = bookService.create(bookDto);
 
@@ -150,7 +151,7 @@ class BookServiceImplTest {
         when(bookRepository.getById(id)).thenReturn(bookFromDb);
         when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
-        when(bookRepository.update(updatedBook)).thenReturn(updatedBook);
+        when(bookRepository.update(any())).thenReturn(updatedBook);
 
         Book actual = bookService.update(bookDto);
 
