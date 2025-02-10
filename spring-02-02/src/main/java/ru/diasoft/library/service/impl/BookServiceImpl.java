@@ -1,6 +1,7 @@
 package ru.diasoft.library.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.diasoft.library.repository.BookRepository;
 import ru.diasoft.library.domain.Author;
 import ru.diasoft.library.domain.Book;
@@ -26,6 +27,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book create(BookRequestDto bookDto) {
         Author author = authorService.findByFullNameOrCreate(bookDto.getAuthorFullName());
         Genre genre = genreService.findByNameOrCreate(bookDto.getGenre());
@@ -38,19 +40,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getById(long id) {
-        return setBookRelations(bookRepository.getById(id));
+        return bookRepository.getById(id);
     }
 
     @Override
     public List<Book> findAll() {
-        List<Book> books = bookRepository.findAll();
-        for (Book book : books) {
-            setBookRelations(book);
-        }
-        return books;
+        return bookRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Book update(BookRequestDto bookDto) {
         Author author = authorService.findByFullNameOrCreate(bookDto.getAuthorFullName());
         Genre genre = genreService.findByNameOrCreate(bookDto.getGenre());
@@ -62,13 +61,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
         bookRepository.deleteById(id);
-    }
-
-    private Book setBookRelations(Book book) {
-        book.setAuthor(authorService.getById(book.getAuthor().getId()));
-        book.setGenre(genreService.getById(book.getGenre().getId()));
-        return book;
     }
 }
