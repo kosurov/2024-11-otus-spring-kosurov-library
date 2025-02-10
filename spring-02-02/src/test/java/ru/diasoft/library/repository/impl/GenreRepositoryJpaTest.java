@@ -3,7 +3,8 @@ package ru.diasoft.library.repository.impl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.diasoft.library.domain.Genre;
 import ru.diasoft.library.exception.GenreNotFoundException;
@@ -11,13 +12,12 @@ import ru.diasoft.library.exception.GenreNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("Dao для работы с жанрами")
-@JdbcTest
+@DisplayName("Репозиторий для работы с жанрами")
+@DataJpaTest
 @Import(GenreRepositoryJpa.class)
-class GenreRepositoryJdbcTest {
+class GenreRepositoryJpaTest {
 
     private static final int EXPECTED_QUANTITY_OF_GENRES = 2;
     private static final long NOT_EXISTED_GENRE_ID = 100L;
@@ -27,6 +27,8 @@ class GenreRepositoryJdbcTest {
 
     @Autowired
     private GenreRepositoryJpa genreRepositoryJpa;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("Возвращает все жанры")
     @Test
@@ -38,7 +40,7 @@ class GenreRepositoryJdbcTest {
     @DisplayName("Ищет жанр по id")
     @Test
     void getById_shouldReturnGenre() {
-        Genre expected = new Genre(EXISTED_GENRE_ID, EXISTED_GENRE_NAME);
+        Genre expected = em.find(Genre.class, EXISTED_GENRE_ID);
         Genre actual = genreRepositoryJpa.getById(expected.getId());
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
@@ -71,28 +73,33 @@ class GenreRepositoryJdbcTest {
     @DisplayName("Обновляет жанр в БД")
     @Test
     void update_shouldUpdateGenre() {
-        Genre existed = genreRepositoryJpa.getById(EXISTED_GENRE_ID);
+        Genre existed = em.find(Genre.class, EXISTED_GENRE_ID);
         assertThat(existed.getName()).isNotEqualTo(NOT_EXISTED_GENRE_NAME);
+        em.detach(existed);
 
-        existed.setName(NOT_EXISTED_GENRE_NAME);
-        genreRepositoryJpa.update(existed);
-        Genre actual = genreRepositoryJpa.getById(EXISTED_GENRE_ID);
+        Genre toUpdate = new Genre(EXISTED_GENRE_ID, NOT_EXISTED_GENRE_NAME);
+
+        genreRepositoryJpa.update(toUpdate);
+        Genre actual = em.find(Genre.class, EXISTED_GENRE_ID);
         assertThat(actual.getName()).isEqualTo(NOT_EXISTED_GENRE_NAME);
     }
 
     @DisplayName("Удаляет жанр из БД по id")
     @Test
     void deleteById_shouldDeleteGenre() {
-        assertThatNoException().isThrownBy(() -> genreRepositoryJpa.getById(EXISTED_GENRE_ID));
+        Genre genre = em.find(Genre.class, EXISTED_GENRE_ID);
+        assertThat(genre).isNotNull();
+        em.detach(genre);
+
         genreRepositoryJpa.deleteById(EXISTED_GENRE_ID);
-        assertThatThrownBy(() -> genreRepositoryJpa.getById(EXISTED_GENRE_ID))
-                .isInstanceOf(GenreNotFoundException.class);
+        Genre deleted = em.find(Genre.class, EXISTED_GENRE_ID);
+        assertThat(deleted).isNull();
     }
 
     @DisplayName("Ищет жанр по name")
     @Test
     void getByName_shouldReturnGenre() {
-        Genre expected = new Genre(EXISTED_GENRE_ID, EXISTED_GENRE_NAME);
+        Genre expected = em.find(Genre.class, EXISTED_GENRE_ID);
         Genre actual = genreRepositoryJpa.getByName(EXISTED_GENRE_NAME);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
