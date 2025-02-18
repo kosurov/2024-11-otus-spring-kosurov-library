@@ -1,10 +1,11 @@
 package ru.diasoft.library.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.diasoft.library.exception.AuthorNotFoundException;
 import ru.diasoft.library.repository.AuthorRepository;
 import ru.diasoft.library.domain.Author;
-import ru.diasoft.library.exception.AuthorNotFoundException;
 import ru.diasoft.library.service.AuthorService;
 
 @Service
@@ -18,7 +19,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author getById(long id) {
-        return authorRepository.getById(id);
+        return authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
@@ -26,13 +27,13 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findByFullNameOrCreate(String fullName) {
         try {
             return getByFullName(fullName);
-        } catch (AuthorNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return create(fullName);
         }
     }
 
     private Author getByFullName(String name) {
-        return authorRepository.getByFullName(name);
+        return authorRepository.findByFullName(name).orElseThrow(AuthorNotFoundException::new);
     }
 
     private Author create(String fullName) {
