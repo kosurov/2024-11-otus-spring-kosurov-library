@@ -16,6 +16,7 @@ import ru.diasoft.library.service.GenreService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -80,7 +81,7 @@ class BookServiceImplTest {
         expected.setGenre(genre);
         expected.setTitle("Книга");
 
-        when(bookRepository.getById(id)).thenReturn(expected);
+        when(bookRepository.findById(id)).thenReturn(Optional.of(expected));
 
         Book actual = bookService.getById(id);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
@@ -130,10 +131,10 @@ class BookServiceImplTest {
         updatedBook.setGenre(genre);
         updatedBook.setTitle(bookDto.getTitle());
 
-        when(bookRepository.getById(id)).thenReturn(bookFromDb);
+        when(bookRepository.findById(id)).thenReturn(Optional.of(bookFromDb));
         when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
-        when(bookRepository.update(any())).thenReturn(updatedBook);
+        when(bookRepository.save(any())).thenReturn(updatedBook);
 
         Book actual = bookService.update(bookDto);
 
