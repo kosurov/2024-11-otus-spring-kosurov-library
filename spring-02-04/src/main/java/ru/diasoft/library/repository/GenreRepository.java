@@ -1,15 +1,11 @@
 package ru.diasoft.library.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.diasoft.library.domain.Genre;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface GenreRepository {
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    List<Genre> findAll();
-    Genre getById(long id);
-    Genre save(Genre genre);
-    Genre update(Genre genre);
-    void deleteById(long id);
-    Genre getByName(String name);
+    Optional<Genre> findByName(String name);
 }
