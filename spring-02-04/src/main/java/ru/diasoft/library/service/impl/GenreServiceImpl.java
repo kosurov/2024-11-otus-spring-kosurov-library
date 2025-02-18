@@ -18,7 +18,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getById(long id) {
-        return genreRepository.getById(id);
+        return genreRepository.findById(id).orElseThrow(GenreNotFoundException::new);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     private Genre getByName(String name) {
-        return genreRepository.getByName(name);
+        return genreRepository.findByName(name).orElseThrow(GenreNotFoundException::new);
     }
 
     private Genre create(String name) {

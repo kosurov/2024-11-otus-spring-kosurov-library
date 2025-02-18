@@ -1,15 +1,11 @@
 package ru.diasoft.library.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.diasoft.library.domain.Author;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface AuthorRepository {
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    List<Author> findAll();
-    Author getById(long id);
-    Author save(Author author);
-    Author update(Author author);
-    void deleteById(long id);
-    Author getByFullName(String fullName);
+    Optional<Author> findByFullName(String fullName);
 }
