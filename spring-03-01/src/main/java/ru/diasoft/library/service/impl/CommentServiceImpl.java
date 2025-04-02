@@ -39,9 +39,8 @@ public class CommentServiceImpl implements CommentService {
         Book book = bookRepository.findById(commentDto.getBookId()).orElseThrow(BookNotFoundException::new);
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
-        Comment savedComment = commentRepository.save(comment);
-        book.getComments().add(comment);
-        return savedComment;
+        comment.setBook(book);
+        return commentRepository.save(comment);
     }
 
     @Override
