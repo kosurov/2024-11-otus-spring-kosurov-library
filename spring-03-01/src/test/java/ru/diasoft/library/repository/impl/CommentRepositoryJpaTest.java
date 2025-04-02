@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import ru.diasoft.library.domain.Book;
 import ru.diasoft.library.domain.Comment;
 import ru.diasoft.library.repository.CommentRepository;
 
@@ -20,6 +22,8 @@ public class CommentRepositoryJpaTest {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("Возвращает все комментарии")
     @Test
@@ -31,7 +35,8 @@ public class CommentRepositoryJpaTest {
     @DisplayName("Сохраняет комментарий в БД")
     @Test
     void save_shouldSaveComment() {
-        Comment comment = new Comment(null, NOT_EXISTED_COMMENT_TEXT);
+        Book book = em.find(Book.class, 1L);
+        Comment comment = new Comment(null, NOT_EXISTED_COMMENT_TEXT, book);
         List<Comment> commentsBefore = commentRepository.findAll();
         commentRepository.save(comment);
         List<Comment> commentsAfter = commentRepository.findAll();
