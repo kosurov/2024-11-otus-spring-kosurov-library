@@ -1,26 +1,45 @@
 package ru.diasoft.library.exception;
 
-import org.springframework.shell.command.CommandExceptionResolver;
-import org.springframework.shell.command.CommandHandlingResult;
-import org.springframework.stereotype.Component;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.diasoft.library.dto.ErrorDto;
 
-@Component
-public class ExceptionResolver implements CommandExceptionResolver {
+@ControllerAdvice
+public class ExceptionResolver {
 
-    @Override
-    public CommandHandlingResult resolve(Exception e) {
-        if (e instanceof AuthorNotFoundException) {
-            return CommandHandlingResult.of("Requested author not found\n");
-        }
-        if (e instanceof BookNotFoundException) {
-            return CommandHandlingResult.of("Requested book not found\n");
-        }
-        if (e instanceof GenreNotFoundException) {
-            return CommandHandlingResult.of("Requested genre not found\n");
-        }
-        if (e instanceof CommentNotFoundException) {
-            return CommandHandlingResult.of("Requested comment not found\n");
-        }
-        return CommandHandlingResult.of("Internal server exception\n");
+    @ExceptionHandler(AuthorNotFoundException.class)
+    public ResponseEntity<ErrorDto> handle(AuthorNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto("Requested author not found"));
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<ErrorDto> handle(BookNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto("Requested book not found"));
+    }
+
+    @ExceptionHandler(GenreNotFoundException.class)
+    public ResponseEntity<ErrorDto> handle(GenreNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto("Requested genre not found"));
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ErrorDto> handle(CommentNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto("Requested comment not found"));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDto> handle(Exception e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto("Internal server exception"));
     }
 }

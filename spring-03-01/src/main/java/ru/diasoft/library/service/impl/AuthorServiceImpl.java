@@ -1,6 +1,5 @@
 package ru.diasoft.library.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.diasoft.library.exception.AuthorNotFoundException;
@@ -27,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findByFullNameOrCreate(String fullName) {
         try {
             return getByFullName(fullName);
-        } catch (EntityNotFoundException e) {
+        } catch (AuthorNotFoundException e) {
             return create(fullName);
         }
     }

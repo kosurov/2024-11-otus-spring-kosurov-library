@@ -1,15 +1,14 @@
 package ru.diasoft.library.service;
 
-import ru.diasoft.library.domain.Book;
-import ru.diasoft.library.dto.BookRequestDto;
+import ru.diasoft.library.dto.BookDto;
 
 import java.util.List;
 
 public interface BookService {
 
-    Book create(BookRequestDto bookDto);
-    Book getById(long id);
-    List<Book> findAll();
-    Book update(BookRequestDto bookDto);
+    BookDto create(BookDto bookDto);
+    BookDto getById(long id);
+    List<BookDto> findAll();
+    BookDto update(long id, BookDto bookDto);
     void delete(long id);
 }
