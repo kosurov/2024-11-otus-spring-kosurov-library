@@ -6,6 +6,7 @@ import ru.diasoft.library.domain.Book;
 import ru.diasoft.library.domain.Comment;
 import ru.diasoft.library.dto.CommentDto;
 import ru.diasoft.library.exception.BookNotFoundException;
+import ru.diasoft.library.mapper.CommentMapper;
 import ru.diasoft.library.repository.BookRepository;
 import ru.diasoft.library.repository.CommentRepository;
 import ru.diasoft.library.service.CommentService;
@@ -18,10 +19,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
+    private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, BookRepository bookRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, BookRepository bookRepository,
+                              CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.bookRepository = bookRepository;
+        this.commentMapper = commentMapper;
     }
 
     @Override
@@ -35,12 +39,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment create(CommentDto commentDto) {
+    public CommentDto create(CommentDto commentDto) {
         Book book = bookRepository.findById(commentDto.getBookId()).orElseThrow(BookNotFoundException::new);
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
         comment.setBook(book);
-        return commentRepository.save(comment);
+        return commentMapper.commentToCommentDto(commentRepository.save(comment));
     }
 
     @Override

@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookRequestDto {
-    private long id;
-    private String title;
-    private String authorFullName;
-    private String genre;
+public class ErrorDto {
+    private String errorMessage;
 }
