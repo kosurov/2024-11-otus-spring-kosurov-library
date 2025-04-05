@@ -5,14 +5,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.diasoft.library.mapper.BookMapper;
+import ru.diasoft.library.mapper.BookMapperImpl;
 import ru.diasoft.library.repository.BookRepository;
 import ru.diasoft.library.domain.Author;
 import ru.diasoft.library.domain.Book;
 import ru.diasoft.library.domain.Genre;
-import ru.diasoft.library.dto.BookRequestDto;
 import ru.diasoft.library.service.AuthorService;
 import ru.diasoft.library.service.GenreService;
+import ru.diasoft.library.dto.BookDto;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,16 +38,18 @@ class BookServiceImplTest {
     private AuthorService authorService;
     @Mock
     private GenreService genreService;
+    @Spy
+    private BookMapper bookMapper = new BookMapperImpl();
 
     @DisplayName("Создает книгу")
     @Test
     void create_shouldCreateBook() {
-        BookRequestDto bookDto = BookRequestDto.builder()
+        BookDto bookDto = BookDto.builder()
                 .title("Книга")
-                .authorFullName("Автор")
+                .author("Автор")
                 .genre("Жанр")
                 .build();
-        Author author = new Author(1L, bookDto.getAuthorFullName());
+        Author author = new Author(1L, bookDto.getAuthor());
         Genre genre = new Genre(2L, bookDto.getGenre());
 
         Book bookToSave = new Book();
@@ -58,13 +63,19 @@ class BookServiceImplTest {
         savedBook.setGenre(genre);
         savedBook.setTitle(bookDto.getTitle());
 
-        when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
+        BookDto expected = new BookDto();
+        expected.setId(10L);
+        expected.setAuthor(author.getFullName());
+        expected.setGenre(genre.getName());
+        expected.setTitle("Книга");
+
+        when(authorService.findByFullNameOrCreate(bookDto.getAuthor())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
         when(bookRepository.save(any())).thenReturn(savedBook);
 
-        Book actual = bookService.create(bookDto);
+        BookDto actual = bookService.create(bookDto);
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(savedBook);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @DisplayName("Получает книгу по id")
@@ -75,15 +86,21 @@ class BookServiceImplTest {
         Author author = new Author(1L, "Автор");
         Genre genre = new Genre(2L, "Жанр");
 
-        Book expected = new Book();
+        Book book = new Book();
+        book.setId(10L);
+        book.setAuthor(author);
+        book.setGenre(genre);
+        book.setTitle("Книга");
+
+        BookDto expected = new BookDto();
         expected.setId(10L);
-        expected.setAuthor(author);
-        expected.setGenre(genre);
+        expected.setAuthor(author.getFullName());
+        expected.setGenre(genre.getName());
         expected.setTitle("Книга");
 
-        when(bookRepository.findById(id)).thenReturn(Optional.of(expected));
+        when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 
-        Book actual = bookService.getById(id);
+        BookDto actual = bookService.getById(id);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
@@ -92,15 +109,21 @@ class BookServiceImplTest {
     void findAll_shouldReturnAllBooks() {
         Author author = new Author(1L, "Автор");
         Genre genre = new Genre(2L, "Жанр");
-        Book expected = new Book();
+        Book book = new Book();
+        book.setId(10L);
+        book.setAuthor(author);
+        book.setGenre(genre);
+        book.setTitle("Книга");
+
+        BookDto expected = new BookDto();
         expected.setId(10L);
-        expected.setAuthor(author);
-        expected.setGenre(genre);
+        expected.setAuthor(author.getFullName());
+        expected.setGenre(genre.getName());
         expected.setTitle("Книга");
 
-        when(bookRepository.findAll()).thenReturn(Collections.singletonList(expected));
+        when(bookRepository.findAll()).thenReturn(Collections.singletonList(book));
 
-        List<Book> actual = bookService.findAll();
+        List<BookDto> actual = bookService.findAll();
 
         assertThat(actual.get(0)).usingRecursiveComparison().isEqualTo(expected);
     }
@@ -109,14 +132,14 @@ class BookServiceImplTest {
     @Test
     void update_shouldUpdateBook() {
         long id = 10L;
-        BookRequestDto bookDto = BookRequestDto.builder()
+        BookDto bookDto = BookDto.builder()
                 .id(id)
                 .title("Книга Updated")
-                .authorFullName("Автор Updated")
+                .author("Автор Updated")
                 .genre("Жанр Updated")
                 .build();
 
-        Author author = new Author(3L, bookDto.getAuthorFullName());
+        Author author = new Author(3L, bookDto.getAuthor());
         Genre genre = new Genre(4L, bookDto.getGenre());
 
         Book bookFromDb = new Book();
@@ -131,14 +154,20 @@ class BookServiceImplTest {
         updatedBook.setGenre(genre);
         updatedBook.setTitle(bookDto.getTitle());
 
+        BookDto expected = new BookDto();
+        expected.setId(10L);
+        expected.setAuthor(author.getFullName());
+        expected.setGenre(genre.getName());
+        expected.setTitle(bookDto.getTitle());
+
         when(bookRepository.findById(id)).thenReturn(Optional.of(bookFromDb));
-        when(authorService.findByFullNameOrCreate(bookDto.getAuthorFullName())).thenReturn(author);
+        when(authorService.findByFullNameOrCreate(bookDto.getAuthor())).thenReturn(author);
         when(genreService.findByNameOrCreate(bookDto.getGenre())).thenReturn(genre);
         when(bookRepository.save(any())).thenReturn(updatedBook);
 
-        Book actual = bookService.update(bookDto);
+        BookDto actual = bookService.update(bookDto.getId(), bookDto);
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(updatedBook);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @DisplayName("Удаляет книгу")
