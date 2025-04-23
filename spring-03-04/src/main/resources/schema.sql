@@ -32,3 +32,8 @@ CREATE SEQUENCE GENRE_SEQUENCE_ID START WITH 100 INCREMENT 1;
 
 DROP SEQUENCE IF EXISTS COMMENT_SEQUENCE_ID;
 CREATE SEQUENCE COMMENT_SEQUENCE_ID START WITH 100 INCREMENT 1;
+
+drop table if exists userprofile;
+create table userprofile(
+    username varchar(50) not null primary key,
+    password varchar(500) not null);
