@@ -12,3 +12,5 @@ insert into book (id, title, authorid, genreid) values (3, 'Мастер и Ма
 insert into comment (id, text) values (1, 'Комментарий 1');
 insert into comment (id, text) values (2, 'Комментарий 2');
 insert into comment (id, text) values (3, 'Комментарий 3');
+
+insert into userprofile (username, password) values ('admin', '{noop}admin123');
