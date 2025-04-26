@@ -12,4 +12,5 @@
 [ДЗ по уроку 2.2. JPQL, Spring ORM, DAO на основе Spring ORM + JPA](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-02-02)  
 [ДЗ по уроку 2.4. Белая магия Spring Data, Spring Data JPA](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-02-04)  
 [ДЗ по уроку 3.1. Современные приложения на Spring MVC](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-01)  
-[ДЗ по уроку 3.4. Spring Security Механизмы аутентификации](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-04) 
+[ДЗ по уроку 3.4. Spring Security Механизмы аутентификации](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-04)  
+[ДЗ по уроку 3.5. Spring Security Авторизация](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-05) 
