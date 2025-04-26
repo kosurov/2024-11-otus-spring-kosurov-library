@@ -37,3 +37,16 @@ drop table if exists userprofile;
 create table userprofile(
     username varchar(50) not null primary key,
     password varchar(500) not null);
+
+drop table if exists userrole;
+create table userrole(
+    id bigint not null primary key,
+    name varchar(50) not null);
+
+DROP SEQUENCE IF EXISTS USERROLE_SEQUENCE_ID;
+CREATE SEQUENCE USERROLE_SEQUENCE_ID START WITH 100 INCREMENT 1;
+
+drop table if exists userprofileuserrole;
+create table userprofileuserrole(
+    username varchar(50) not null,
+    roleid bigint not null);
