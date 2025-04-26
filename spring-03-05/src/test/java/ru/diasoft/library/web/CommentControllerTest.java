@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.diasoft.library.service.CommentService;
+import ru.diasoft.library.web.security.AuthTokenFilter;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +22,8 @@ class CommentControllerTest {
 
     @Autowired
     private MockMvc mvc;
+    @MockitoBean
+    private AuthTokenFilter authTokenFilter;
     @MockitoBean
     private CommentService commentService;
 
