@@ -1,31 +1,34 @@
 package ru.diasoft.library.web;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.diasoft.library.config.SpringSecurityConfig;
 import ru.diasoft.library.service.CommentService;
-import ru.diasoft.library.web.security.AuthTokenFilter;
+import ru.diasoft.library.web.security.JwtUtils;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(CommentController.class)
+@Import(SpringSecurityConfig.class)
 class CommentControllerTest {
 
     @Autowired
     private MockMvc mvc;
     @MockitoBean
-    private AuthTokenFilter authTokenFilter;
-    @MockitoBean
     private CommentService commentService;
+    @MockitoBean
+    private UserDetailsService userService;
+    @MockitoBean
+    private JwtUtils jwtUtils;
 
     @Test
     void createComment_unauthorized() throws Exception {
@@ -69,7 +72,15 @@ class CommentControllerTest {
 
     @WithMockUser(username = "admin")
     @Test
-    void deleteComment_authorized() throws Exception {
+    void deleteComment_authorized_hasNoRole() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/comment/1")
+                        .with(csrf().asHeader()))
+                .andExpect(status().isForbidden());
+    }
+
+    @WithMockUser(username = "admin", roles = {"MODERATOR"})
+    @Test
+    void deleteComment_authorized_hasRole() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/comment/1")
                         .with(csrf().asHeader()))
                 .andExpect(status().is2xxSuccessful());

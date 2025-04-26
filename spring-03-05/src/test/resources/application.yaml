@@ -11,7 +11,7 @@ spring:
 
   sql:
     init:
-      data-locations: data-test.sql
+      data-locations: classpath:data-test.sql
 
   jpa:
     generate-ddl: false
