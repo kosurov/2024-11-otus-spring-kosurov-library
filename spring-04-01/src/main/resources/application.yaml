@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: library
+
+  shell:
+    interactive:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+
+  h2:
+    console:
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  file:
+    name: app.log
