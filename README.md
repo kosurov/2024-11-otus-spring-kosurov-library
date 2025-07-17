@@ -13,4 +13,5 @@
 [ДЗ по уроку 2.4. Белая магия Spring Data, Spring Data JPA](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-02-04)  
 [ДЗ по уроку 3.1. Современные приложения на Spring MVC](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-01)  
 [ДЗ по уроку 3.4. Spring Security Механизмы аутентификации](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-04)  
-[ДЗ по уроку 3.5. Spring Security Авторизация](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-05) 
+[ДЗ по уроку 3.5. Spring Security Авторизация](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-03-05)  
+[ДЗ по уроку 4.1. Монолиты vs. Microservices (Round 2), Spring Boot Actuator - must have в микросервисах](https://github.com/kosurov/2024-11-otus-spring-kosurov-library/tree/lesson-04-01) 
