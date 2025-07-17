@@ -28,6 +28,7 @@ public class SpringSecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator", "/actuator/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/user").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
